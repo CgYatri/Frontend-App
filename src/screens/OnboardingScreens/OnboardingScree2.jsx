@@ -12,9 +12,9 @@ import {
 // App ke logo aur illustration ke liye assets
 // NOTE: In paths ko apne project ke actual asset paths se replace karein
 const AppLogo = require('../../assets/images/cg-yatri-logo.png');
-const OnboardingIllustration = require('../../assets/images/logo4.png');
+const OnboardingIllustration = require('../../assets/images/onboarding-illustration2.png');
 
-const SplashScreenTwo = () => {
+const SplashScreen2 = ({ navigation }) => {
   // Active slide/dot ko track karne ke liye state
   const [activeDot, setActiveDot] = React.useState(1);
 
@@ -40,7 +40,7 @@ const SplashScreenTwo = () => {
       <View className="flex-1 justify-center items-center px-4">
           <Image
           source={AppLogo}
-          className="w-48 h-24 flex items-center mx-auto mt-10 "
+          className="w-40 h-24 flex items-center mx-auto mt-10 "
         //   resizeMode="contain"
         />
         {/* Onboarding ki image */}
@@ -51,7 +51,7 @@ const SplashScreenTwo = () => {
         />
         
         {/* Headline Text */}
-        <Text className="text-5xl font-bold text-center text-gray-800 mt-10 ">
+        <Text className="text-5xl font-bold text-center text-gray-800  ">
           No Middleman...
           You & Driver
         </Text>
@@ -77,7 +77,7 @@ const SplashScreenTwo = () => {
         </View>
 
         {/* Get Started Button */}
-        <TouchableOpacity className="bg-blue-600 w-full py-4 rounded-xl items-center justify-center">
+        <TouchableOpacity onPress={() => navigation.navigate("OnboardingScreen3")} className="bg-blue-600 w-full py-4 rounded-xl items-center justify-center">
           <Text className="text-white text-lg font-bold">
             Get Started
           </Text>
@@ -87,4 +87,4 @@ const SplashScreenTwo = () => {
   );
 };
 
-export default SplashScreenTwo;
+export default SplashScreen2;

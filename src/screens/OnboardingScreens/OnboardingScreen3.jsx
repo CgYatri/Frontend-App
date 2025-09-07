@@ -11,13 +11,15 @@ import {
 
 // App ke logo aur illustration ke liye assets
 // NOTE: In paths ko apne project ke actual asset paths se replace karein
+// const AppLogo = require('./assets/cg-yatri-logo.png');
+// const OnboardingIllustration = require('./assets/onboarding-illustration3.png');
 
 const AppLogo = require('../../assets/images/cg-yatri-logo.png');
-const OnboardingIllustration = require('../../assets/images/logo4.png');
+const OnboardingIllustration = require('../../assets/images/onboarding-illustration3.png');
 
-const SplashScreen4 = () => {
+const OnboardingScreen3 = ({ navigation }) => {
   // Active slide/dot ko track karne ke liye state
-  const [activeDot, setActiveDot] = React.useState(3);
+  const [activeDot, setActiveDot] = React.useState(2);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -41,25 +43,26 @@ const SplashScreen4 = () => {
       <View className="flex-1 justify-center items-center px-4">
           <Image
           source={AppLogo}
-          className="w-48 h-24 flex items-center mx-auto mt-10 "
+          className="w-40 h-24 flex items-center mx-auto mt-1 "
         //   resizeMode="contain"
         />
         {/* Onboarding ki image */}
         <Image
           source={OnboardingIllustration}
-          className="w-full h-80 mt-10"
+          className="w-full h-[35vh] my-5"
           resizeMode="contain"
         />
         
         {/* Headline Text */}
         <Text className="text-5xl font-bold text-center text-gray-800 mt-10 ">
-          Inclusive mobility for all
+         Your Safety is Guranteed
         </Text>
 
         {/* Sub-headline Text */}
-        <Text className="text-lg text-center text-gray-500 mt-4 w-80">
-          CG Yatri provides every user
-with quality experience
+        <Text className="text-lg text-center  mt-4 w-80">
+          
+24 x 7 Servicable S.O.S Support to ensure we 
+are there for you.
         </Text>
       </View>
 
@@ -78,7 +81,7 @@ with quality experience
         </View>
 
         {/* Get Started Button */}
-        <TouchableOpacity className="bg-blue-600 w-full py-4 rounded-xl items-center justify-center">
+        <TouchableOpacity onPress={() => navigation.navigate("OnboardingScreen4")} className="bg-blue-600 w-full py-4 rounded-xl items-center justify-center">
           <Text className="text-white text-lg font-bold">
             Get Started
           </Text>
@@ -88,4 +91,4 @@ with quality experience
   );
 };
 
-export default SplashScreen4;
+export default OnboardingScreen3;

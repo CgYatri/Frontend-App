@@ -1,8 +1,17 @@
 // SplashScreen.js
 import React from "react";
+import { useEffect } from "react";
 import { View, Image, StatusBar } from "react-native";
 
-const SplashScreen = () => {
+const SplashScreen = ({ navigation }) => {
+
+useEffect(() => {
+    // 3 second ke liye splash screen show kare
+    setTimeout(() => {
+      navigation.replace("OnboardingScreen1"); // Home screen par navigate kare
+    }, 2000);
+  }, []);
+
   return (
     <View className="flex-1  bg-white justify-between">
       <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />

@@ -48,7 +48,14 @@ export default function LocationSearch({ navigation, route }) {
 
         <TouchableOpacity
           className="mt-5 bg-blue-600 rounded-xl py-3 items-center"
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("GoogleMap")}
+          activeOpacity={0.9}
+        >
+          <Text className="text-white font-semibold">Save & Back</Text>
+        </TouchableOpacity>
+         <TouchableOpacity
+          className="mt-5 bg-blue-600 rounded-xl py-3 items-center"
+          onPress={() => navigation.navigate("Home")}
           activeOpacity={0.9}
         >
           <Text className="text-white font-semibold">Save & Back</Text>

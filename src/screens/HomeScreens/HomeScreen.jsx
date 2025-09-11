@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, TouchableOpacity, Image, PermissionsAndroid, Platform, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, Image, PermissionsAndroid, Platform, FlatList, StatusBar } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Geolocation from "react-native-geolocation-service";
 import ServicesGrid from "../../components/ServicesGrid";
@@ -25,32 +25,32 @@ export default function HomeScreen({ navigation }) {
   });
   const [hasLocation, setHasLocation] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        if (Platform.OS === "android") {
-          const ok = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-          );
-          if (ok !== PermissionsAndroid.RESULTS.GRANTED) return;
-        }
-        Geolocation.getCurrentPosition(
-          pos => {
-            const { latitude, longitude } = pos.coords;
-            const next = { ...region, latitude, longitude };
-            setRegion(next);
-            setHasLocation(true);
-            mapRef.current?.animateToRegion(next, 600);
-          },
-          err => console.log("Location error:", err),
-          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-        );
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       if (Platform.OS === "android") {
+  //         const ok = await PermissionsAndroid.request(
+  //           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+  //         );
+  //         if (ok !== PermissionsAndroid.RESULTS.GRANTED) return;
+  //       }
+  //       Geolocation.getCurrentPosition(
+  //         pos => {
+  //           const { latitude, longitude } = pos.coords;
+  //           const next = { ...region, latitude, longitude };
+  //           setRegion(next);
+  //           setHasLocation(true);
+  //           mapRef.current?.animateToRegion(next, 600);
+  //         },
+  //         err => console.log("Location error:", err),
+  //         { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+  //       );
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   })();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   // mock: favourite routes (in real app, compute from history)
   const favouriteRoutes = [
@@ -64,10 +64,13 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <>
+    <StatusBar backgroundColor="white" barStyle="dark-content" />
+     <View className="flex-1 bg-white pt-7 ">
       {/* MAP BACKDROP */}
-      <View className="absolute inset-0">
-        <MapView
+      <View className="absolute inset-0 ">
+
+        {/* <MapView
           ref={mapRef}
           style={{ flex: 1 }}
           provider={PROVIDER_GOOGLE}
@@ -77,7 +80,7 @@ export default function HomeScreen({ navigation }) {
           {hasLocation && (
             <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
           )}
-        </MapView>
+        </MapView> */}
       </View>
 
       {/* CONTENT OVER MAP */}
@@ -190,5 +193,7 @@ export default function HomeScreen({ navigation }) {
       {/* Bottom nav placeholder (space) */}
       <BottomNav />
     </View>
+    </>
+   
   );
 }

@@ -7,19 +7,19 @@ export default function LocationSearch({ navigation, route }) {
   const [from, setFrom] = useState(prefill.from ?? "");
   const [to, setTo] = useState(prefill.to ?? "");
 
-  useEffect(() => {
-    // autofill current location in 'from' if empty
-    if (!from) {
-      Geolocation.getCurrentPosition(
-        pos => {
-          const { latitude, longitude } = pos.coords;
-          setFrom(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`);
-        },
-        err => console.log(err),
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   // autofill current location in 'from' if empty
+  //   if (!from) {
+  //     Geolocation.getCurrentPosition(
+  //       pos => {
+  //         const { latitude, longitude } = pos.coords;
+  //         setFrom(`My Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`);
+  //       },
+  //       err => console.log(err),
+  //       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+  //     );
+  //   }
+  // }, []);
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} className="flex-1 bg-white">

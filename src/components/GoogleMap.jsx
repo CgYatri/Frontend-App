@@ -61,14 +61,16 @@ const GoogleMap = () => {
   if (!region) return <View><Text>Fetching current location...</Text></View>;
 
   return (
-    <View className='flex-1'>
-      <MapView
-      className='flex-1'
-        provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        showsUserLocation={true}   // 👈 blue dot for current location
-        region={region}            // 👈 focus on current location
-      />
+    <View>
+      <View style={{ height: 300 }}>
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          style={styles.map}
+          showsUserLocation={true}
+          region={region}
+        />
+      </View>
+      {/* You can add other content below the map here */}
     </View>
   );
 };

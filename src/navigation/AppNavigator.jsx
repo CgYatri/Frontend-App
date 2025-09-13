@@ -1,27 +1,28 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import SplashScreen1 from "../screens/OnboardingScreens/SplashScreenOne";
+import OnboardingScreen from "../screens/OnboardingScreens/OnboardingScreen"; 
 import HomeScreen from "../screens/HomeScreens/HomeScreen";
 import LocationSearch from "../screens/HomeScreens/LocationSearch";
 import ServicesDetail from "../screens/HomeScreens/ServicesDetail";
 import Referral from "../screens/HomeScreens/Referral";
 import GoogleMap from "../components/GoogleMap";
-import SplashScreen1 from "../screens/OnboardingScreens/SplashScreenOne";
-import OnboardingScreen1 from "../screens/OnboardingScreens/OnboardingScreen1";
-import OnboardingScreen2 from "../screens/OnboardingScreens/OnboardingScree2";
-import OnboardingScreen3 from "../screens/OnboardingScreens/OnboardingScreen3";
-import OnboardingScreen4 from "../screens/OnboardingScreens/OnboardingScreen4";
-
+import LoginScreen from "../screens/LoginScreens/LoginScreen";
+import OtpScreen from "../screens/LoginScreens/OtpScreen";
+import ProfileSetupScreen from "../screens/LoginScreens/ProfileSetupScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {/* Always register all screens */}
       <Stack.Screen name="SplashScreen" component={SplashScreen1} />
-      <Stack.Screen name="OnboardingScreen1" component={OnboardingScreen1} />
-      <Stack.Screen name="OnboardingScreen2" component={OnboardingScreen2} />
-      <Stack.Screen name="OnboardingScreen3" component={OnboardingScreen3} />
-      <Stack.Screen name="OnboardingScreen4" component={OnboardingScreen4} />
+      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      <Stack.Screen name="OtpScreen" component={OtpScreen} />
+      <Stack.Screen name="ProfileSetupScreen" component={ProfileSetupScreen} />
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="LocationSearch" component={LocationSearch} />
       <Stack.Screen name="ServicesDetail" component={ServicesDetail} />

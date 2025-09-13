@@ -45,7 +45,7 @@ const DropdownArrowIcon = (props) => (
     </Svg>
 );
 
-const ProfileSetupScreen = () => {
+const ProfileSetupScreen = ({ navigation }) => {
   // Form ki saari values ko ek state me manage karna
   const [form, setForm] = useState({
     fullName: '',
@@ -61,7 +61,11 @@ const ProfileSetupScreen = () => {
 
   // Input change ko handle karne ke liye ek function
   const handleInputChange = (name, value) => {
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm(prevForm => {
+      const updatedForm = { ...prevForm };
+      updatedForm[name] = value;
+      return updatedForm;
+    });
   };
   
   // Date picker se date select hone par
@@ -80,6 +84,11 @@ const ProfileSetupScreen = () => {
   // Check karein ki zaroori fields bhari hain ya nahi
   const isFormValid = form.fullName.trim() !== '' && form.gender !== '';
 
+  const handleSubmit = async () => {
+    navigation.navigate("HomeScreen");
+    await AsyncStorage.setItem("userDetails", "true");
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
       <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
@@ -88,7 +97,7 @@ const ProfileSetupScreen = () => {
         <TouchableOpacity className="mb-6 w-10 h-10 justify-center items-center bg-white rounded-full border border-gray-200">
           <BackArrowIcon className="w-6 h-6 text-gray-800" />
         </TouchableOpacity>
-        <View className="flex-row gap-2">
+        <View className="flex-row gap-2"> 
           <View className="flex-1 h-1.5 bg-gray-200 rounded-full" />
           <View className="flex-1 h-1.5 bg-gray-200 rounded-full" />
           <View className="flex-1 h-1.5 bg-blue-600 rounded-full" />
@@ -104,14 +113,15 @@ const ProfileSetupScreen = () => {
             {/* --- Full Name Input --- */}
             <View className="mb-5">
                 <Text className="text-base font-semibold text-gray-700 mb-2">Full name</Text>
-                <View className="flex-row items-center bg-white border border-gray-300 rounded-lg">
-                    <UserIcon className="w-5 h-5 text-gray-400 ml-4"/>
+                <View className="flex-row items-center bg-white border border-gray-300 rounded-lg px-4">
+                    {/* <UserIcon className="w-5 h-5 text-gray-400"/> */}
                     <TextInput 
-                        className="flex-1 p-4 text-base text-gray-800"
+                        className="flex-1 py-4 pl-3 text-base text-gray-800"
                         placeholder="Enter your name"
                         placeholderTextColor="#9CA3AF"
                         value={form.fullName}
                         onChangeText={(text) => handleInputChange('fullName', text)}
+                        editable={true}
                     />
                 </View>
             </View>
@@ -132,10 +142,10 @@ const ProfileSetupScreen = () => {
             {/* --- Email Input (Optional) --- */}
             <View className="mb-5">
                 <Text className="text-base font-semibold text-gray-700 mb-2">Email (Optional)</Text>
-                 <View className="flex-row items-center bg-white border border-gray-300 rounded-lg">
-                    <EnvelopeIcon className="w-5 h-5 text-gray-400 ml-4"/>
+                 <View className="flex-row items-center bg-white border border-gray-300 rounded-lg px-4">
+                    {/* <EnvelopeIcon className="w-5 h-5 text-gray-400"/> */}
                     <TextInput 
-                        className="flex-1 p-4 text-base text-gray-800"
+                        className="flex-1 py-4 pl-3 text-base text-gray-800"
                         placeholder="Enter your email"
                         placeholderTextColor="#9CA3AF"
                         keyboardType='email-address'
@@ -229,6 +239,7 @@ const ProfileSetupScreen = () => {
       {/* --- Proceed Button --- */}
        <View className="p-6 border-t border-gray-200 bg-gray-50">
             <TouchableOpacity 
+                onPress={()=> handleSubmit()}
                 disabled={!isFormValid}
                 className={`w-full py-4 rounded-xl items-center justify-center ${isFormValid ? 'bg-blue-600' : 'bg-blue-300'}`}
             >

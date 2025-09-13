@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-
   View,
   Text,
   TouchableOpacity,
   StatusBar,
   TextInput,
-  Keyboard, // Keyboard ko manage karne ke liye
 } from 'react-native';
-// SVG icons ke liye, aapko 'react-native-svg' install karna hoga
 import { Svg, Path } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// --- SVG Icons ---
 
 // Back Arrow Icon
 const BackArrowIcon = (props) => (
@@ -31,118 +27,151 @@ const BackArrowIcon = (props) => (
   </Svg>
 );
 
-
-const OtpScreen = () => {
-  // OTP ko string ke roop me manage karne ke liye state
-  const [otp, setOtp] = useState('');
-  // Resend timer ke liye state
+const OtpScreen = ({ navigation}) => {
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(30);
-  // TextInput ko reference karne ke liye
-  const inputRef = useRef(null);
+  const inputRefs = useRef(Array(6).fill(null));
 
-  // Timer ke liye useEffect
   useEffect(() => {
-    // Component mount hote hi keyboard open karein
-    inputRef.current?.focus();
+    // Focus first input on mount
+    if (inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
+  }, []);
 
+  // Timer
+  useEffect(() => {
     if (timer === 0) return;
     const interval = setInterval(() => {
       setTimer((prev) => prev - 1);
     }, 1000);
     return () => clearInterval(interval);
   }, [timer]);
-  
-  // Resend button ke liye
+
   const handleResend = () => {
-    console.log("Resending OTP...");
-    setTimer(30); // Timer ko reset karein
+    console.log('Resending OTP...');
+    setTimer(30);
+  };
+
+  const handleLogin = async () => {
+    navigation.navigate("ProfileSetupScreen");
+    await AsyncStorage.setItem("isLoggedIn", "true");
   }
 
-  const isOtpComplete = otp.length === 6;
+  const isOtpComplete = otp.every(digit => digit !== '');
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-      
-      {/* Hidden TextInput jo keyboard input handle karega */}
-      <TextInput
-        ref={inputRef}
-        className="absolute -left-full" // Ise screen se bahar rakhein
-        keyboardType="number-pad"
-        maxLength={6}
-        value={otp}
-        onChangeText={setOtp}
-      />
 
       <View className="flex-1 justify-between">
         <View>
-            {/* Top Section: Back Arrow & Progress */}
-            <View className="p-6">
-                <TouchableOpacity className="mb-6 w-10 h-10 justify-center items-center bg-gray-100 rounded-full">
-                <BackArrowIcon className="w-6 h-6 text-gray-800" />
-                </TouchableOpacity>
-                <View className="flex-row gap-2">
-                <View className="flex-1 h-1.5 bg-gray-200 rounded-full" />
-                <View className="flex-1 h-1.5 bg-blue-600 rounded-full" />
-                <View className="flex-1 h-1.5 bg-gray-200 rounded-full" />
-                </View>
+          {/* Top Section */}
+          <View className="p-6">
+            <TouchableOpacity className="mb-6 w-10 h-10 justify-center items-center bg-gray-100 rounded-full">
+              <BackArrowIcon className="w-6 h-6 text-gray-800" />
+            </TouchableOpacity>
+            <View className="flex-row gap-2">
+              <View className="flex-1 h-1.5 bg-gray-200 rounded-full" />
+              <View className="flex-1 h-1.5 bg-blue-600 rounded-full" />
+              <View className="flex-1 h-1.5 bg-gray-200 rounded-full" />
+            </View>
+          </View>
+
+          {/* OTP Input */}
+          <View className="p-6">
+            <Text className="text-2xl font-bold text-gray-900 mb-6">
+              Enter the 6 digit OTP sent to your Number
+            </Text>
+
+            <View className="flex-row justify-between mb-6">
+              {otp.map((digit, index) => (
+                <TextInput
+                  key={index}
+                  ref={(element) => {
+                    inputRefs.current[index] = element;
+                  }}
+                  value={digit}
+                  onChangeText={(text) => {
+                    // Only allow numbers
+                    if (!/^[0-9]*$/.test(text)) return;
+
+                    const newOtp = [...otp];
+                    newOtp[index] = text;
+                    setOtp(newOtp);
+
+                    // If a number is entered, move to next box
+                    if (text.length === 1 && index < 5) {
+                      const nextInput = inputRefs.current[index + 1];
+                      if (nextInput) {
+                        nextInput.focus();
+                      }
+                    }
+                  }}
+                  onKeyPress={({ nativeEvent }) => {
+                    // Handle backspace
+                    if (nativeEvent.key === 'Backspace' && !otp[index]) {
+                      const newOtp = [...otp];
+                      newOtp[index - 1] = '';
+                      setOtp(newOtp);
+                      
+                      if (index > 0) {
+                        const prevInput = inputRefs.current[index - 1];
+                        if (prevInput) {
+                          prevInput.focus();
+                        }
+                      }
+                    }
+                  }}
+                  maxLength={1}
+                  keyboardType="numeric"
+                  style={{
+                    width: 48,
+                    height: 56,
+                    backgroundColor: '#F3F4F6',
+                    borderRadius: 8,
+                    textAlign: 'center',
+                    fontSize: 24,
+                    fontWeight: 'bold',
+                    color: '#1F2937',
+                    borderWidth: 2,
+                    borderColor: digit ? '#2563EB' : 'transparent',
+                  }}
+                />
+              ))}
             </View>
 
-            {/* Middle Section: OTP Input */}
-            <View className="p-6">
-                <Text className="text-2xl font-bold text-gray-900 mb-6">
-                Enter the 6 digit OTP sent to your Number
-                </Text>
-                
-                {/* OTP Boxes - Inhe touch karne par keyboard khulega */}
-                <TouchableOpacity onPress={() => inputRef.current?.focus()} activeOpacity={1}>
-                    <View className="flex-row justify-between mb-6">
-                    {[...Array(6)].map((_, index) => {
-                        const digit = otp[index] || '';
-                        // Current box ko highlight karne ke liye
-                        const isFocused = index === otp.length; 
-
-                        return (
-                        <View
-                            key={index}
-                            className={`w-12 h-14 bg-gray-100 rounded-lg justify-center items-center border-2 ${
-                                isFocused ? 'border-blue-500' : 'border-transparent'
-                            }`}
-                        >
-                            <Text className="text-2xl font-bold text-gray-800">{digit}</Text>
-                        </View>
-                        );
-                    })}
-                    </View>
+            {/* Resend */}
+            <View className="flex-row items-center justify-center">
+              <Text className="text-sm text-gray-500">
+                didn't receive our SMS?{' '}
+              </Text>
+              {timer > 0 ? (
+                <Text className="text-sm text-gray-400">Resend in {timer}s</Text>
+              ) : (
+                <TouchableOpacity onPress={handleResend}>
+                  <Text className="text-sm text-blue-600 font-semibold">
+                    Resend
+                  </Text>
                 </TouchableOpacity>
-
-                {/* Resend Text */}
-                <View className="flex-row items-center justify-center">
-                    <Text className="text-sm text-gray-500">
-                        didn't receive our SMS?{' '}
-                    </Text>
-                    {timer > 0 ? (
-                        <Text className="text-sm text-gray-400">Resend in {timer}s</Text>
-                    ) : (
-                        <TouchableOpacity onPress={handleResend}>
-                            <Text className="text-sm text-blue-600 font-semibold">Resend</Text>
-                        </TouchableOpacity>
-                    )}
-                </View>
+              )}
             </View>
+          </View>
         </View>
 
-        {/* Bottom Section: Proceed Button */}
+        {/* Proceed */}
         <View className="p-6">
-            <TouchableOpacity 
-                disabled={!isOtpComplete}
-                className={`w-full py-4 rounded-xl items-center justify-center ${isOtpComplete ? 'bg-blue-600' : 'bg-blue-300'}`}
-            >
-                <Text className="text-white text-lg font-bold">Proceed</Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            disabled={!isOtpComplete}
+            onPress={() => handleLogin()}
+            className={`w-full py-4 rounded-xl items-center justify-center ${
+              isOtpComplete ? 'bg-blue-600' : 'bg-blue-300'
+            }`}
+          >
+            <Text className="text-white text-lg font-bold">Proceed</Text>
+          </TouchableOpacity>
         </View>
       </View>
-
     </SafeAreaView>
   );
 };

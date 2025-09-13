@@ -10,7 +10,10 @@ import OnboardingScreen1 from "../screens/OnboardingScreens/OnboardingScreen1";
 import OnboardingScreen2 from "../screens/OnboardingScreens/OnboardingScree2";
 import OnboardingScreen3 from "../screens/OnboardingScreens/OnboardingScreen3";
 import OnboardingScreen4 from "../screens/OnboardingScreens/OnboardingScreen4";
+import ComingSoon from "../components/LoadingScreens/ComingSoon";
 
+import FaqsScreen from "../screens/FaqsScreen";
+import BusTracking from "../screens/HomeScreens/BusTracking";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +30,9 @@ export default function AppNavigator() {
       <Stack.Screen name="ServicesDetail" component={ServicesDetail} />
       <Stack.Screen name="Referral" component={Referral} />
       <Stack.Screen name="GoogleMap" component={GoogleMap} />
+      <Stack.Screen name="Faqs" component={FaqsScreen} />
+       <Stack.Screen name="BusTracking" component={BusTracking} />
+       <Stack.Screen name="ComingSoon" component={ComingSoon} />
     </Stack.Navigator>
   );
 }

@@ -22,14 +22,9 @@ const ReferScreen = () => {
       {/* Header */}
       <View className="flex-row justify-between items-center mb-2">
         {/* Back Button */}
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Home")}
-          className="p-2"
-        >
-         <View className="flex-row gap-2">
-           <Ionicons name="arrow-back" size={24} color="black" />
-         </View>
-        </TouchableOpacity>
+       <TouchableOpacity onPress={() => navigation.goBack()}>
+                   <Text className="text-2xl">←</Text>
+                 </TouchableOpacity>
 
         <Text className="text-xl font-semibold text-black mr-32">Refer Friends</Text>
 

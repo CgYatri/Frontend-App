@@ -16,6 +16,7 @@ import { Svg, Path } from 'react-native-svg';
 // Date picker ke liye, aapko yeh library install karni hogi
 // npm install @react-native-community/datetimepicker
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // --- SVG Icons --- //
@@ -85,7 +86,7 @@ const ProfileSetupScreen = ({ navigation }) => {
   const isFormValid = form.fullName.trim() !== '' && form.gender !== '';
 
   const handleSubmit = async () => {
-    navigation.navigate("HomeScreen");
+    navigation.replace("BottomTabs");
     await AsyncStorage.setItem("userDetails", "true");
   };
 

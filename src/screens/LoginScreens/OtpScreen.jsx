@@ -5,9 +5,11 @@ import {
   TouchableOpacity,
   StatusBar,
   TextInput,
+  Alert,
 } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Back Arrow Icon
 const BackArrowIcon = (props) => (
@@ -27,9 +29,10 @@ const BackArrowIcon = (props) => (
   </Svg>
 );
 
-const OtpScreen = ({ navigation}) => {
+const OtpScreen = ({ navigation }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(30);
+  const [isLoading, setIsLoading] = useState(false);
   const inputRefs = useRef(Array(6).fill(null));
 
   useEffect(() => {
@@ -54,8 +57,36 @@ const OtpScreen = ({ navigation}) => {
   };
 
   const handleLogin = async () => {
-    navigation.navigate("ProfileSetupScreen");
-    await AsyncStorage.setItem("isLoggedIn", "true");
+    if (isLoading) return; // Prevent multiple submissions
+    
+    try {
+      setIsLoading(true);
+      
+      // Check if OTP is complete
+      if (!isOtpComplete) {
+        Alert.alert('Error', 'Please enter the complete OTP');
+        return;
+      }
+
+      // Get the entered OTP
+      const enteredOTP = otp.join('');
+      
+      // Clear the isLoggedIn status first
+      await AsyncStorage.removeItem("isLoggedIn");
+      
+      // Then set it to true
+      await AsyncStorage.setItem("isLoggedIn", "true");
+      
+      navigation.replace("ProfileSetupScreen");
+    } catch (error) {
+      console.error('Error in handleLogin:', error);
+      Alert.alert(
+        'Error',
+        'Failed to process login. Please try again.'
+      );
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const isOtpComplete = otp.every(digit => digit !== '');
@@ -162,13 +193,15 @@ const OtpScreen = ({ navigation}) => {
         {/* Proceed */}
         <View className="p-6">
           <TouchableOpacity
-            disabled={!isOtpComplete}
-            onPress={() => handleLogin()}
+            disabled={!isOtpComplete || isLoading}
+            onPress={handleLogin}
             className={`w-full py-4 rounded-xl items-center justify-center ${
-              isOtpComplete ? 'bg-blue-600' : 'bg-blue-300'
+              isOtpComplete && !isLoading ? 'bg-blue-600' : 'bg-blue-300'
             }`}
           >
-            <Text className="text-white text-lg font-bold">Proceed</Text>
+            <Text className="text-white text-lg font-bold">
+              {isLoading ? 'Processing...' : 'Proceed'}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

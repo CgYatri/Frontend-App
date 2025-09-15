@@ -1,6 +1,6 @@
 // SplashScreen.js
 import React, { useEffect } from "react";
-import { View, Image, StatusBar } from "react-native";
+import { View, Image, StatusBar, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
@@ -10,36 +10,61 @@ const SplashScreen = () => {
   useEffect(() => {
     const checkAppFlow = async () => {
       try {
-        // 1. Onboarding check
-        const isOnboarded = await AsyncStorage.getItem("isOnboarded");
-        if (!isOnboarded) {
+        // Get all required data in parallel for better performance
+        const [isOnboarded, isLoggedIn, userDetails] = await Promise.all([
+          AsyncStorage.getItem("isOnboarded"),
+          AsyncStorage.getItem("isLoggedIn"),
+          AsyncStorage.getItem("userDetails")
+        ]);
+
+        // 1. Onboarding check - must be completed first
+        if (!isOnboarded || isOnboarded !== "true") {
           navigation.replace("OnboardingScreen");
           return;
         }
 
-        // 2. Login check
-        const isLoggedIn = await AsyncStorage.getItem("isLoggedIn"); // tum login pe ye set karoge
-        if (!isLoggedIn) {
+        // 2. Login check - must be logged in
+        if (!isLoggedIn || isLoggedIn !== "true") {
           navigation.replace("LoginScreen");
           return;
         }
 
-        // 3. User detail check
-        const userDetails = await AsyncStorage.getItem("userDetails"); // JSON string
+        // 3. User detail check - must have valid user details
         if (!userDetails) {
-          navigation.replace("UserDetailScreen");
+          navigation.replace("ProfileSetupScreen");
           return;
         }
 
-        // 4. All ok → Home
+        // Validate userDetails is proper JSON (optional but recommended)
+        try {
+          const parsedUserDetails = JSON.parse(userDetails);
+          if (!parsedUserDetails || typeof parsedUserDetails !== 'object') {
+            throw new Error('Invalid user details format');
+          }
+        } catch (parseError) {
+          console.warn('Invalid user details found, redirecting to user details screen');
+          navigation.replace("ProfileSetupScreen");
+          return;
+        }
+
+        // 4. All checks passed → Navigate to Home
         navigation.replace("HomeScreen");
-      } catch (e) {
-        console.log("Error checking app flow:", e);
-        navigation.replace("OnboardingScreen"); // fallback
+      } catch (error) {
+        // Log the specific error for debugging
+        console.error("Error in checkAppFlow:", error);
+        
+        // Handle specific error cases
+        if (error.name === 'InvalidAccessError') {
+          // Handle storage access errors
+          Alert.alert('Error', 'Unable to access app storage. Please ensure storage permissions are granted.');
+        }
+        
+        // Default fallback - go to onboarding
+        navigation.replace("OnboardingScreen");
       }
     };
 
-    // 2 sec splash delay
+    // Add minimal initial delay for splash screen visibility
     const timeout = setTimeout(checkAppFlow, 2000);
     return () => clearTimeout(timeout);
   }, [navigation]);

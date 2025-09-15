@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 
 // Replace with your actual metro map image later
-const temp = require("../assets/images/logo4.png");
+const temp = require("../assets/images/promo1.png");
 
 export default function MetroMapPlaceholder() {
   return (

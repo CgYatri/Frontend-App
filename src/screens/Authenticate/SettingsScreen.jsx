@@ -1,13 +1,54 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const SettingsScreen = ({ navigation }) => {
   const handleNavigation = (screenName) => {
-    console.log(`Navigating to: ${screenName}`);
-    // navigation.navigate(screenName); // Uncomment this to enable navigation
+    switch (screenName) {
+      case 'Preferences':
+        navigation.navigate('ComingSoon');
+        break;
+      case 'Share and Refer':
+        navigation.navigate('Referral');
+        break;
+      case 'Help & Supports':
+        navigation.navigate('HelpAndSupport');
+        break;
+      case 'About':
+        navigation.navigate('ComingSoon');
+        break;
+      case 'General':
+        navigation.navigate('ComingSoon');
+        break;
+      case 'Logout':
+        navigation.navigate('LogoutModal');
+        break;
+      case 'Delete Account':
+        // You might want to show a confirmation modal here
+        Alert.alert(
+          'Delete Account',
+          'Are you sure you want to delete your account? This action cannot be undone.',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Delete',
+              style: 'destructive',
+              onPress: () => {
+                // Add your delete account logic here
+                console.log('Deleting account...');
+              },
+            },
+          ]
+        );
+        break;
+      default:
+        console.log(`Navigation to ${screenName} not implemented yet`);
+    }
   };
 
   const renderMenuItem = (label, iconComponent, isDestructive = false) => (
@@ -40,23 +81,33 @@ const SettingsScreen = ({ navigation }) => {
           <View style={styles.menuSection}>
             {renderMenuItem(
               'Preferences',
-              <MaterialIcons name="tune" size={24} color="#555" />
+              <MaterialIcons name="tune" size={24} color="#555" />,
+              false,
+              'Customize your app preferences'
             )}
             {renderMenuItem(
               'Share and Refer',
-              <MaterialIcons name="share" size={24} color="#555" />
+              <MaterialIcons name="share" size={24} color="#555" />,
+              false,
+              'Share the app with friends'
             )}
             {renderMenuItem(
               'Help & Supports',
-              <Icon name="help-circle-outline" size={24} color="#555" />
+              <Icon name="help-circle-outline" size={24} color="#555" />,
+              false,
+              'Get help and support'
             )}
             {renderMenuItem(
               'About',
-              <MaterialIcons name="info-outline" size={24} color="#555" />
+              <MaterialIcons name="info-outline" size={24} color="#555" />,
+              false,
+              'About CG Yatri'
             )}
             {renderMenuItem(
               'General',
-              <MaterialIcons name="settings-outline" size={24} color="#555" />
+              <MaterialIcons name="settings-outline" size={24} color="#555" />,
+              false,
+              'General settings'
             )}
           </View>
 
@@ -64,12 +115,14 @@ const SettingsScreen = ({ navigation }) => {
             {renderMenuItem(
               'Logout',
               <MaterialIcons name="logout" size={24} color="red" />,
-              true
+              true,
+              'Log out of your account'
             )}
             {renderMenuItem(
               'Delete Account',
               <MaterialCommunityIcons name="delete-outline" size={24} color="red" />,
-              true
+              true,
+              'Permanently delete your account'
             )}
           </View>
         </ScrollView>

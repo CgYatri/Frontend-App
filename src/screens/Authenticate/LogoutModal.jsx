@@ -1,8 +1,9 @@
 import React from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LogoutModal = ({ isVisible, onClose, onConfirm }) => {
+const LogoutModal = ({ isVisible, onClose, onConfirm, navigation }) => {
   return (
     <Modal
       animationType="fade"
@@ -16,11 +17,31 @@ const LogoutModal = ({ isVisible, onClose, onConfirm }) => {
           <Text style={styles.modalTitle}>Log out?</Text>
           <Text style={styles.modalText}>Are you sure you want to log out from the CG-Yatri App?</Text>
           
-          <TouchableOpacity style={styles.submitButton} onPress={onConfirm}>
+          <TouchableOpacity 
+            style={styles.submitButton} 
+            onPress={async () => {
+              try {
+                // Clear login status
+                await AsyncStorage.removeItem("isLoggedIn");
+                // Clear any other user-related data if needed
+                await AsyncStorage.removeItem("userDetails");
+                
+                // Call the onConfirm callback (which should handle navigation)
+              
+                navigation.replace("LoginScreen");
+              } catch (error) {
+                console.error('Error during logout:', error);
+                Alert.alert(
+                  'Error',
+                  'Failed to logout. Please try again.'
+                );
+              }
+            }}
+          >
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.goBackButton} onPress={onClose}>
+          <TouchableOpacity style={styles.goBackButton} onPress={() => navigation.goBack()}>
             <Text style={[styles.buttonText, styles.goBackText]}>Go Back</Text>
           </TouchableOpacity>
         </View>

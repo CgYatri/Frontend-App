@@ -158,8 +158,8 @@ export default function HomeScreen({ navigation }) {
           />
         </View>
       </ScrollView>
-      {/* Bottom nav (static) */}
-      <BottomNav />
+     
+    
     </>
   );
 }

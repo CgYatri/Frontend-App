@@ -13,7 +13,30 @@ import {
 // NOTE: In paths ko apne project ke actual asset paths se replace karein
 // const AppLogo = require('./assets/cg-yatri-logo.png');
 // const OnboardingIllustration = require('./assets/onboarding-illustration3.png');
-
+// {
+//     id: 1,
+//     title: "Welcome to CG Yatri",
+//     desc: "Find buses, autos, metro and more services easily.",
+//     image: require("../../assets/images/onboarding-illustration.png"),
+//   },
+//   {
+//     id: 2,
+//     title: "Track in Real-Time",
+//     desc: "Track your city transport in real time on map.",
+//     image: require("../../assets/images/onboarding-illustration2.png"),
+//   },
+//   {
+//     id: 3,
+//     title: "Book Easily",
+//     desc: "Book rides and pay online hassle-free.",
+//     image: require("../../assets/images/onboarding-illustration3.png"),
+//   },
+//   {
+//     id: 4,
+//     title: "Safe & Reliable",
+//     desc: "Enjoy safe and reliable travel experience.",
+//     image: require("../../assets/images/onboarding-illustration4.png"),
+//   },
 const AppLogo = require('../../assets/images/cg-yatri-logo.png');
 const OnboardingIllustration = require('../../assets/images/onboarding-illustration3.png');
 

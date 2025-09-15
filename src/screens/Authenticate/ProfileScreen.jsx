@@ -34,7 +34,7 @@ const ProfileScreen = ({ navigation }) => {
         {/* Local image ko yahan use kiya gaya hai */}
         <Image source={require('../../assets/images/user.png')} style={styles.profileImage} />
         <Text style={styles.userName}>{userData.name}</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
           <Text style={styles.editProfileText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
@@ -49,28 +49,28 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={styles.menuItemText}>My Rides</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#999" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Payments')}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Payment')}>
           <MaterialIcons name="payment" size={24} color="#555" />
           <Text style={styles.menuItemText}>Payments</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#999" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Favourites')}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Favorites')}>
           <MaterialIcons name="favorite" size={24} color="#555" />
           <Text style={styles.menuItemText}>Favourites</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#999" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('ComingSoon')}>
           <MaterialIcons name="security" size={24} color="#555" />
           <Text style={styles.menuItemText}>Safety</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#999" />
         </TouchableOpacity>
         <View style={styles.horizontalLine} />
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('ComingSoon')}>
           <MaterialIcons name="language" size={24} color="#555" />
           <Text style={styles.menuItemText}>Language</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#999" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('ComingSoon')}>
           <MaterialIcons name="notifications" size={24} color="#555" />
           <Text style={styles.menuItemText}>Notification</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#999" />
@@ -80,9 +80,9 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={styles.menuItemText}>Settings</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#999" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Referral')}>
           <MaterialIcons name="share" size={24} color="#555" />
-          <Text style={styles.menuItemText}>Share and Refer</Text>
+          <Text style={styles.menuItemText} >Share and Refer</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#999" />
         </TouchableOpacity>
         <View style={styles.horizontalLine} />
@@ -96,7 +96,7 @@ const ProfileScreen = ({ navigation }) => {
           <Text style={styles.menuItemText}>About</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="#999" />
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.menuItem, styles.logoutItem]}>
+        <TouchableOpacity style={[styles.menuItem, styles.logoutItem]} onPress={() => navigation.navigate('LogoutModal')}>
           <MaterialIcons name="logout" size={24} color="red" />
           <Text style={[styles.menuItemText, styles.logoutText]}>Logout</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="red" />
